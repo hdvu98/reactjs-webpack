@@ -49,6 +49,13 @@
         font-weight: bolder;
         border-radius: 1rem;
       }
+      &::before{
+        display: block;
+        content: attr(nav-item);
+        font-weight: bolder;
+        height: 0;
+        visibility: hidden;        
+      }
     }
   }
 }

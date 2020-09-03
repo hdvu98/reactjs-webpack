@@ -9,10 +9,16 @@ const paths = {
 }
 
 module.exports = {
-  entry: ['babel-polyfill', path.join(paths.SRC, 'index.js')],
+  entry: ['babel-polyfill',path.join(paths.SRC, 'index.js')],
   output: {
     path: paths.DIST,
-    filename: 'app.bundle.js',
+    filename: '[name].bundle.js',
+    chunkFilename: '[name].chunk.js',
+  },
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+    },
   },
   module: {
     rules: [
@@ -40,7 +46,12 @@ module.exports = {
       {
         test: /\.(png|jpe?g|gif)$/,
         use: {
-          loader: 'file-loader'
+          loader: 'url-loader',
+          options: {
+            limit: 10000,
+            name: '[name]-[hash].[ext]',
+            outputPath: ('images') 
+          }
         }
       }
 
@@ -53,7 +64,10 @@ module.exports = {
   },
   resolve: {
     mainFiles: ['index', 'index.js','index.scss'],
-    extensions: ['.jsx', '.js', '.json', '.scss', '.css']
+    extensions: ['.jsx', '.js', '.json', '.scss', '.css'],
+    alias: {
+      '@components': path.resolve(paths.SRC, 'components')
+    }
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -61,9 +75,8 @@ module.exports = {
       favicon: path.join(paths.SRC, 'assets/icons/favicon.ico')
     }),
     new MiniCssExtractPlugin({
-      filename: '[name].css',
-      chunkFilename: '[id].css',
+      filename: '[hash].css',
+      chunkFilename: '[name].[hash].css',
     }),
   ],
-  target: 'node',
 }
