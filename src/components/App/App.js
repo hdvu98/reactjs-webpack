@@ -9,7 +9,7 @@ const App = () => {
   return(
   <Router>
     <Layout>
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div className="spinner">Loading...</div>}>
       <Switch>
         <Route exact path="/" component={Home}/>
         <Route path="/about" component={About}/>
